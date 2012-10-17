@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import javax.swing.text.AbstractDocument.Content;
 
+import org.apache.log4j.Logger;
+
 import com.orange.weiboservice.WeiboContent;
 
 import weibo4j.Timeline;
@@ -15,6 +17,7 @@ import weibo4j.model.Status;
 
 public class SendWeibo {
 	
+	private static Logger logger = Logger.getLogger("SendWeibo");
 	private final static int COUNT = 3; // top 3 drawings.
 	
 	private final static WeiboContent weiboContent = new WeiboContent();
@@ -27,6 +30,7 @@ public class SendWeibo {
 			String word = weiboContent.getWord(i);
 			String text = "今日#猜猜画画作品榜#第"+ (i+1) + "名：@"+ sinaId+" 的【"
 					+ word+ "】。欣赏更多精彩涂鸦，敬请关注@猜猜画画手机版 。";
+			
 			try {
 				try {
 					byte[] content = readFileImage(drawingPath);
