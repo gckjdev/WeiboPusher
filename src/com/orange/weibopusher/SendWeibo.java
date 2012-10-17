@@ -4,14 +4,12 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.swing.text.AbstractDocument.Content;
 
 import org.apache.log4j.Logger;
 
 import com.orange.weiboservice.WeiboContent;
 
 import weibo4j.Timeline;
-import weibo4j.http.HttpClient;
 import weibo4j.http.ImageItem;
 import weibo4j.model.Status;
 
@@ -30,7 +28,7 @@ public class SendWeibo {
 			String word = weiboContent.getWord(i);
 			
 			if (sinaId == null) {
-				sinaId = weiboContent.getNickName(i);
+				sinaId = "游戏玩家" + weiboContent.getNickName(i);
 			} else {
 				sinaId = "@"+sinaId;
 			}

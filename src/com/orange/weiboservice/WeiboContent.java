@@ -107,14 +107,6 @@ public class WeiboContent {
 		 }
 	 }
 	 
-	public String getdrawing(int i) {
-		if ( i < 0 || i+ 1  > COUNT ) 
-			return null;
-		String url = "/Library/WebServer/Documents/draw_image/";
-		url += urlList.get(i);
-		
-		return url;
-	}
 
 	private User getUser(int i)
 	{
@@ -124,6 +116,15 @@ public class WeiboContent {
 		User user = UserManager.findUserByUserId(mongoClient, uid);
 		logger.info("uid = "+ uid + ", user = " + user);
 		return user;
+	}
+
+	public String getdrawing(int i) {
+		if ( i < 0 || i+ 1  > COUNT ) 
+			return null;
+		String url = "/Library/WebServer/Documents/draw_image/";
+		url += urlList.get(i);
+		
+		return url;
 	}
 	
 	public String getSinaNickName(int i) {
