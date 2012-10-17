@@ -50,6 +50,14 @@
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
 		</dependency>
+		<dependency>
+			<groupId>weibo4j-oauth2</groupId>
+			<artifactId>weibo4j-oauth2</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/weibo4j-oauth2-1.0-SNAPSHOT.jar</systemPath>
+		</dependency>
+
 	</dependencies>
 
 	<build>
