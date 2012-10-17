@@ -110,17 +110,27 @@ public class WeiboContent {
 	public String getdrawing(int i) {
 		if ( i < 0 || i+ 1  > COUNT ) 
 			return null;
-		String url = "/data/draw_image/";
+		String url = "/Library/WebServer/Documents/draw_image/";
 		url += urlList.get(i);
 		
 		return url;
 	}
 
-	public String getSinaNickName(int i) {
+	private User getUser(int i)
+	{
 		if ( i < 0 || i+ 1  > COUNT ) 
 			return null;
 		String uid = userIdList.get(i);
 		User user = UserManager.findUserByUserId(mongoClient, uid);
+		logger.info("uid = "+ uid + ", user = " + user);
+		return user;
+	}
+	
+	public String getSinaNickName(int i) {
+		User user = getUser(i);
+		if (user == null) {
+			return null;
+		}
 		String sinaNickName = user.getSinaNickName();
 		return sinaNickName;
 	}
@@ -130,6 +140,14 @@ public class WeiboContent {
 			return null;
 		String word = wordList.get(i);
 		return word;
+	}
+
+	public String getNickName(int i) {
+		User user = getUser(i);
+		if (user == null) {
+			return null;
+		}
+		return user.getNickName();
 	}  
 	    
 }

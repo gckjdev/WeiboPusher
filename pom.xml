@@ -1,18 +1,20 @@
 
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-	<repositories>
-<!-- 		<repository>
+      <repositories>
+<!--
+ 		<repository>
 			<id>local-nexus</id>
 			<name>local nexus</name>
 			<url>http://localhost:8091/nexus/content/groups/public</url>
 		</repository> 
+-->
 		<repository>
 			<id>nexus</id>
 			<name>local nexus</name>
 			<url>http://192.168.1.101:8091/nexus/content/groups/public</url>
 		</repository>
- -->
+
 		<repository>
 			<id>repo1 central</id>
 			<name>Maven Central Repo1</name>
@@ -22,7 +24,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.orange</groupId>
-	<artifactId>GameTrafficAPIServer</artifactId>
+	<artifactId>WeiboPusher</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<!-- Shared version number properties -->
@@ -54,8 +56,9 @@
 			<groupId>weibo4j-oauth2</groupId>
 			<artifactId>weibo4j-oauth2</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/weibo4j-oauth2-1.0-SNAPSHOT.jar</systemPath>
+<!--			<scope>system</scope>
+			<systemPath>~/.m2/repository/com/orange/weibo4j-oauth2-1.0-SNAPSHOT.jar</systemPath>
+-->
 		</dependency>
 
 	</dependencies>
@@ -74,13 +77,12 @@
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>./lib/</classpathPrefix>
 							<mainClass>
-								com.orange.game.api.GameTrafficApiServer
+								com.orange.weibopusher.SendWeibo
 							</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
-		
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

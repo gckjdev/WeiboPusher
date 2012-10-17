@@ -16,21 +16,27 @@ import weibo4j.http.ImageItem;
 import weibo4j.model.Status;
 
 public class SendWeibo {
-	
+
 	private static Logger logger = Logger.getLogger("SendWeibo");
 	private final static int COUNT = 3; // top 3 drawings.
-	
+
 	private final static WeiboContent weiboContent = new WeiboContent();
-	
+
 	public static void main(String args[]) {
-		
-		for (int i = 0; i < COUNT ; i++) {
-			String drawingPath =  weiboContent.getdrawing(i);
+
+		for (int i = 0; i < COUNT; i++) {
+			String drawingPath = weiboContent.getdrawing(i);
 			String sinaId = weiboContent.getSinaNickName(i);
 			String word = weiboContent.getWord(i);
-			String text = "今日#猜猜画画作品榜#第"+ (i+1) + "名：@"+ sinaId+" 的【"
-					+ word+ "】。欣赏更多精彩涂鸦，敬请关注@猜猜画画手机版 。";
 			
+			if (sinaId == null) {
+				sinaId = weiboContent.getNickName(i);
+			} else {
+				sinaId = "@"+sinaId;
+			}
+			String text = "今日#猜猜画画作品榜#第" + (i + 1) + "名：" + sinaId + " 的【" + word
+			+ "】。欣赏更多精彩涂鸦，敬请关注@猜猜画画手机版 。";
+
 			try {
 				try {
 					byte[] content = readFileImage(drawingPath);
@@ -47,7 +53,7 @@ public class SendWeibo {
 				}
 			} catch (Exception ioe) {
 				System.out.println("Failed to read the system input.");
-			} 
+			}
 		}
 	}
 
