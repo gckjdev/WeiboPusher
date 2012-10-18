@@ -27,8 +27,8 @@ public class WeiboContent {
 	// only for top 3 drawings.
 	private final static int COUNT = 3; 
 	
-//	String url = "http://58.215.184.18:8100/api?m=gtow&lang=1&ct=3&os=0";
-	String url = "http://192.168.1.13:8100/api?m=gtow&lang=1&ct=3&os=0";
+	String url = "http://58.215.184.18:8100/api?m=gtow&lang=1&ct=3&os=0";
+//	String url = "http://192.168.1.13:8100/api?m=gtow&lang=1&ct=3&os=0";
 	String returnResult;
 	
 	 // for top 3 users' userId
@@ -121,7 +121,7 @@ public class WeiboContent {
 	public String getdrawing(int i) {
 		if ( i < 0 || i+ 1  > COUNT ) 
 			return null;
-		String url = "/Library/WebServer/Documents/draw_image/";
+		String url = "/root/draw_image/"; ///Library/WebServer/Documents/draw_image/";
 		url += urlList.get(i);
 		
 		return url;

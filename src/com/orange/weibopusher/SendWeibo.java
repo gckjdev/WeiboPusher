@@ -3,8 +3,6 @@ package com.orange.weibopusher;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-
-
 import org.apache.log4j.Logger;
 
 import com.orange.weiboservice.WeiboContent;
@@ -18,8 +16,8 @@ public class SendWeibo {
 	private static Logger logger = Logger.getLogger("SendWeibo");
 	private final static int COUNT = 3; // top 3 drawings.
 
-	private final static WeiboContent weiboContent = new WeiboContent();
-
+    static WeiboContent weiboContent = new WeiboContent();
+    
 	public static void main(String args[]) {
 
 		for (int i = 0; i < COUNT; i++) {
@@ -42,7 +40,7 @@ public class SendWeibo {
 					ImageItem pic = new ImageItem("pic", content);
 					String s = java.net.URLEncoder.encode(text, "utf-8");
 					Timeline tl = new Timeline();
-					tl.client.setToken(args[0]);// access_token
+					tl.setToken(args[0]);// access_token
 					Status status = tl.UploadStatus(s, pic);
 					System.out.println("Successfully upload the status to ["
 							+ status.getText() + "].");

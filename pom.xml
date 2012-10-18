@@ -8,12 +8,12 @@
 			<name>local nexus</name>
 			<url>http://localhost:8091/nexus/content/groups/public</url>
 		</repository> 
+-->
 		<repository>
 			<id>nexus</id>
 			<name>local nexus</name>
 			<url>http://192.168.1.101:8091/nexus/content/groups/public</url>
 		</repository>
--->
 		<repository>
 			<id>repo1 central</id>
 			<name>Maven Central Repo1</name>
@@ -36,9 +36,14 @@
 	</properties>
 	<dependencies>
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>servlet-api</artifactId>
-		    <version>2.5</version>
+		    <groupId>com.orange</groupId>
+		    <artifactId>Common_Java</artifactId>
+		    <version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.orange</groupId>
+		    <artifactId>Common_Java_Game</artifactId>
+		    <version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -55,11 +60,9 @@
 			<groupId>weibo4j-oauth2</groupId>
 			<artifactId>weibo4j-oauth2</artifactId>
 			<version>1.0-SNAPSHOT</version>
-<!--			<scope>system</scope>
-			<systemPath>~/.m2/repository/com/orange/weibo4j-oauth2-1.0-SNAPSHOT.jar</systemPath>
--->
+			<scope>system</scope>
+			<systemPath>${HOME}/.m2/repository/weibo4j-oauth2/weibo4j-oauth2/1.0-SNAPSHOT/weibo4j-oauth2-1.0-SNAPSHOT.jar</systemPath>
 		</dependency>
-
 	</dependencies>
 
 	<build>

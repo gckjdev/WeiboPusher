@@ -1,0 +1,14 @@
+WeiboPusher
+===========
+
+注意：
+本工程依赖新浪微博SDK包，我把它打包成jar包，放在lib目录下。
+在使用本工程前，需要将该包放入本地仓库，才可使用.
+命令:
+mvn install:install-file -DgroupId=weibo4j-oauth2 -DartifactId=weibo4j-oauth2 
+    -Dversion=1.0-SNAPSHOT -Dpackaging=jar -Dfile=/本工程目录/lib/weibo4j-oauth2-1.0-SNAPSHOT.jar
+   
+    
+
+    
+
