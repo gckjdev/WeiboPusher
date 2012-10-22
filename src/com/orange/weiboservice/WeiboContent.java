@@ -13,6 +13,7 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 
 import com.orange.common.mongodb.MongoDBClient;
+import com.orange.game.constants.DBConstants;
 import com.orange.game.constants.ServiceConstant;
 import com.orange.game.model.dao.User;
 import com.orange.game.model.manager.UserManager;
@@ -21,8 +22,8 @@ import com.orange.game.model.manager.UserManager;
 
 public class WeiboContent {
 
-	private static Logger logger = Logger.getLogger("WeiboContent");
-	private static MongoDBClient mongoClient = new MongoDBClient("game");
+	private static Logger logger = Logger.getLogger(WeiboContent.class.getName());
+	private static MongoDBClient mongoClient = new MongoDBClient(DBConstants.D_GAME);
 	
 	// only for top 3 drawings.
 	private final static int COUNT = 3; 
@@ -42,7 +43,7 @@ public class WeiboContent {
 		try {
 			returnResult = sendGet(url);
 		} catch (IOException e) {
-			logger.info("Get weibo conten failed!!!");
+			logger.info("Get weibo content failed!!!");
 			e.printStackTrace();
 		}
 		parseJson(returnResult);
@@ -114,14 +115,14 @@ public class WeiboContent {
 			return null;
 		String uid = userIdList.get(i);
 		User user = UserManager.findUserByUserId(mongoClient, uid);
-		logger.info("uid = "+ uid + ", user = " + user);
+//		logger.info("uid = "+ uid + ", user = " + user);
 		return user;
 	}
 
 	public String getdrawing(int i) {
 		if ( i < 0 || i+ 1  > COUNT ) 
 			return null;
-		String url = "/root/draw_image/"; ///Library/WebServer/Documents/draw_image/";
+		String url = "/data/draw_image/"; ///Library/WebServer/Documents/draw_image/";
 		url += urlList.get(i);
 		
 		return url;
