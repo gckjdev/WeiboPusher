@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import com.orange.weiboservice.Award;
 import com.orange.weiboservice.WeiboContent;
 
 import weibo4j.Timeline;
@@ -14,15 +15,17 @@ public class SendWeibo {
 
 	private final static int COUNT = 3; // top 3 drawings.
 
-   private static WeiboContent weiboContent = new WeiboContent();
-    
+   private final static WeiboContent weiboContent = new WeiboContent();
+   private final static Award awardService = Award.getInstance();
      
+   private final static String CUSTOMER_SERVICE_UID = "888888888888888888888888"; 
 	public static void main(String args[]) {
 
 		for (int i = COUNT-1; i >= 0; i--) {
 			String drawingPath = weiboContent.getdrawing(i);
 			String sinaId = weiboContent.getSinaNickName(i);
 			String word = weiboContent.getWord(i);
+			String userId = weiboContent.getUserId(i);
 			
 			if (sinaId == null) {
 				sinaId = "玩家" + weiboContent.getNickName(i);
@@ -33,6 +36,8 @@ public class SendWeibo {
 			+ "】。欣赏更多精彩涂鸦，敬请关注@猜猜画画手机版 。";
 
 			doSendWeibo(args[0], drawingPath, text);
+			awardService.chargeAwardCoins(userId, i+1);
+			awardService.sendAwardMessage(CUSTOMER_SERVICE_UID, userId, word, i+1);
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
@@ -46,7 +51,6 @@ public class SendWeibo {
 		try {
 			try {
 				byte[] content = readFileImage(drawingPath);
-//					System.out.println("content length:" + content.length);
 				ImageItem pic = new ImageItem("pic", content);
 				String s = java.net.URLEncoder.encode(text, "utf-8");
 				Timeline tl = new Timeline();

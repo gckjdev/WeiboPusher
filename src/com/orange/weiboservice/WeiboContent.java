@@ -22,8 +22,9 @@ import com.orange.game.model.manager.UserManager;
 
 public class WeiboContent {
 
-	private static Logger logger = Logger.getLogger(WeiboContent.class.getName());
-	private static MongoDBClient mongoClient = new MongoDBClient(DBConstants.D_GAME);
+	private final static Logger logger = Logger.getLogger(WeiboContent.class.getName());
+	private final static MongoDBClient mongoClient = new MongoDBClient(DBConstants.D_GAME);
+	
 	
 	// only for top 3 drawings.
 	private final static int COUNT = 3; 
@@ -115,8 +116,14 @@ public class WeiboContent {
 			return null;
 		String uid = userIdList.get(i);
 		User user = UserManager.findUserByUserId(mongoClient, uid);
-//		logger.info("uid = "+ uid + ", user = " + user);
 		return user;
+	}
+	
+	public String getUserId(int i) {
+		
+		if ( i < 0 || i+ 1  > COUNT ) 
+			return null;
+		return userIdList.get(i);
 	}
 
 	public String getdrawing(int i) {
