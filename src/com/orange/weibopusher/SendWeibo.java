@@ -36,7 +36,7 @@ public class SendWeibo {
 			+ "】。欣赏更多精彩涂鸦，敬请关注@猜猜画画手机版 。";
 
 			doSendWeibo(args[0], drawingPath, text);
-			awardService.chargeAwardCoins(userId, i+1);
+			awardService.chargeAwardCoins(userId, i);
 			awardService.sendAwardMessage(CUSTOMER_SERVICE_UID, userId, word, i+1);
 			try {
 				Thread.sleep(5000);
