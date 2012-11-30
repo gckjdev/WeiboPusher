@@ -30,7 +30,6 @@ public class WeiboContent {
 	private final static int COUNT = 3; 
 	
 	String url = "http://58.215.184.18:8100/api?m=gtow&lang=1&ct=3&os=0";
-//	String url = "http://192.168.1.13:8100/api?m=gtow&lang=1&ct=3&os=0";
 	String returnResult;
 	
 	 // for top 3 users' userId
@@ -42,7 +41,7 @@ public class WeiboContent {
 
 	public WeiboContent() {
 		try {
-			returnResult = sendGet(url);
+			returnResult = query(url);
 		} catch (IOException e) {
 			logger.info("Get weibo content failed!!!");
 			e.printStackTrace();
@@ -50,7 +49,7 @@ public class WeiboContent {
 		parseJson(returnResult);
 	}
 	
-	 private String sendGet(String url) throws IOException {  
+	 private String query(String url) throws IOException {  
 	        String result = "";  
 	        BufferedReader in = null;  
 	        java.net.URL connURL = new java.net.URL(url);  
@@ -142,6 +141,15 @@ public class WeiboContent {
 		}
 		String sinaNickName = user.getSinaNickName();
 		return sinaNickName;
+	}
+	
+	public String getQQId(int i) {
+		User user = getUser(i);
+		if (user == null) {
+			return null;
+		}
+		String QQId = user.getQQID();
+		return QQId;
 	}
 
 	public String getWord(int i) {

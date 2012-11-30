@@ -33,8 +33,8 @@ public class Award {
 	public void sendAwardMessage(String userId, String toUserId, String opusName, int rank) {
 		
 		String message = "您的画作["+opusName+"］荣登今日画榜第"+ rank+"名，获得"+AWARD_COINS[rank-1]+"金币。" +
-				"期望再接再厉，也欢迎加入猜猜画画玩家QQ群[228119679]和玩家们一起交流, 关注新浪微博[@猜猜画画手机版]获取每天" +
-				"新鲜画榜!";
+				"期望再接再厉，也欢迎加入猜猜画画玩家QQ群[228119679]和玩家们一起交流, 关注新浪微博[@猜猜画画手机版]或" +
+				"腾讯微博[猜猜画画手机版]获取每天新鲜画榜!";
 		
 		MessageManager.creatMessage(dbClient, Message.MessageTypeText, userId, toUserId, 
 				null, message, 0.0, 0.0, null, 0);
