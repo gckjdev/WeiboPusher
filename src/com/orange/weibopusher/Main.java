@@ -17,12 +17,24 @@ public class Main {
 	public static void main(String[] args) {
 		
 		// 发新浪微博
-		String sinaAccessToken = args[0]; 
-		sinaWeibo.updateSinaWeibo(sinaAccessToken);
+		final String sinaAccessToken = args[0]; 
+		Thread sina = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				sinaWeibo.updateSinaWeibo(sinaAccessToken);
+			}
+		});
+		sina.start();
 		
 		// 发腾讯微博
-		String tencentAccessToken = args[1];
-		tencentWeibo.updateTencentWeibo(tencentAccessToken);
+		final String tencentAccessToken = args[1];
+		Thread tencent = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				tencentWeibo.updateTencentWeibo(tencentAccessToken);
+			}
+		});
+		tencent.start();
 		
 		// 奖励金币，并发私信告知
 		for (int i = COUNT-1; i >= 0; i--) {
