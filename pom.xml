@@ -117,8 +117,8 @@
 			<classifier>jdk15</classifier>
 		</dependency>
 		<dependency>
-			<groupId>weibo4j-oauth2</groupId>
-			<artifactId>weibo4j-oauth2</artifactId>
+			<groupId>Sina-weibo4j</groupId>
+			<artifactId>Sina-weibo4j</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
