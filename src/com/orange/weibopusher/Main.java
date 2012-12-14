@@ -28,10 +28,11 @@ public class Main {
 		
 		// 发腾讯微博
 		final String tencentAccessToken = args[1];
+		final String tencentOpenKey = args[2];
 		Thread tencent = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				tencentWeibo.updateTencentWeibo(tencentAccessToken);
+				tencentWeibo.updateTencentWeibo(tencentAccessToken, tencentOpenKey);
 			}
 		});
 		tencent.start();
