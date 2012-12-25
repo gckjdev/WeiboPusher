@@ -1,7 +1,6 @@
-package com.orange.weibopusher;
+package com.orange.weiboservice;
 
 
-import com.orange.weiboservice.WeiboContent;
 import com.tencent.weibo.api.TAPI;
 import com.tencent.weibo.oauthv2.OAuthV2;
 
@@ -21,22 +20,14 @@ import com.tencent.weibo.oauthv2.OAuthV2;
  */
 public class TencentWeibo {
 
-	private final static int DEFAULT_COUNT = 3; // top 3 drawings.
 
-	private final  WeiboContent weiboContent;
-	private final  int topCount;
+	private final  CommonWeiboContent weiboContent;
 	
-	TencentWeibo(WeiboContent content) {
+	public TencentWeibo(CommonWeiboContent content) {
 		this.weiboContent = content;
-		this.topCount = DEFAULT_COUNT;
 	}
 	
-	TencentWeibo(WeiboContent content, int topCount) {
-		this.weiboContent = content;
-		this.topCount = topCount;
-	}
-	
-	public void updateTencentWeibo(String accessToken, String openKey) {
+	public void sendDailyTencentWeibo(String accessToken, String openKey, int topCount) {
 
 		for (int i = topCount-1; i >= 0; i--) {
 			String drawingPath = weiboContent.getdrawing(i);
@@ -51,7 +42,8 @@ public class TencentWeibo {
 			String text = "今日#猜猜画画作品榜#第" + (i + 1) + "名：" + QQId + " 的【" + word
 			+ "】。欣赏每日精彩涂鸦, 获取猜猜画画最新动态，敬请关注@drawlively 。";
 
-			sendWeibo(accessToken, openKey, drawingPath, text);
+			sendOneTencentWeibo(accessToken, openKey, drawingPath, text);
+//			sendOneTencentWeibo(accessToken, openKey, "/home/larmbr/Downloads/dog.jpg", "最后一条测试微博"+i);
 			
 			// 不能频繁发微博
 			try {
@@ -62,12 +54,37 @@ public class TencentWeibo {
 		}
 	}
 
-	/**
-	 * @param accessToken  Tencent access token
-	 * @param drawingPath  drawing path
-	 * @param text         weibo content
-	 */
-	private void sendWeibo(String accessToken, String openKey, String drawingPath, String text) {
+	
+	public void sendContestTencentWeibo(String accessToken, String openKey, int topCount) {
+		
+		for (int i = topCount-1; i >= 0; i--) {
+			String drawingPath = weiboContent.getdrawing(i);
+			String QQId = weiboContent.getQQId(i);
+			String contestSubject = ((ContestWeiboContent)weiboContent).getContestSubject();
+			int participatorCount = ((ContestWeiboContent)weiboContent).getParticipatorCount();
+			
+			if (QQId == null) {
+				QQId = "玩家" + weiboContent.getNickName(i);
+			} else {
+				QQId = "@"+QQId;
+			}
+			String text = "#"+contestSubject+"#结束啦！  恭喜" + QQId + " 在参赛的"+participatorCount+"名玩家中脱颖而出， " 
+				      +"荣获第"+(i+1)+"名。 让我们期待下一次比赛吧，敬请关注@drawlively 。";
+
+			sendOneTencentWeibo(accessToken, openKey, drawingPath, text);
+//			sendOneTencentWeibo(accessToken, openKey, "/home/larmbr/Downloads/dog.jpg", text);
+			
+			// 不能频繁发微博
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	public void sendOneTencentWeibo(String accessToken, String openKey, String drawingPath, String text) {
 
 		  OAuthV2 oAuth = new OAuthV2();
 		  
@@ -89,11 +106,10 @@ public class TencentWeibo {
         String latitude = null; // 纬度 
         String syncFlag = ""; // 微博同步到空间分享标记（可选，0-同步，1-不同步，默认为0）  
         try {
-			tAPI.addPic(oAuth, format, text, clientip, longitude, latitude, drawingPath, syncFlag);
+			   tAPI.addPic(oAuth, format, text, clientip, longitude, latitude, drawingPath, syncFlag);
 		  } catch (Exception e) {
 			  e.printStackTrace();
 		   }
 	}
-	
-	
+
 }

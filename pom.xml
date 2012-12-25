@@ -137,7 +137,7 @@
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>./lib/</classpathPrefix>
 							<mainClass>
-								com.orange.weibopusher.Main
+								com.orange.weibopusher.MainPusher
 							</mainClass>
 						</manifest>
 					</archive>
