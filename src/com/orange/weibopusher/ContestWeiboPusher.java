@@ -22,6 +22,7 @@ public class ContestWeiboPusher {
 	private static final int TOP_COUNT_WEIBO = 3;
 	// 客服的User ID
 	private final static String CUSTOMER_SERVICE_UID = "888888888888888888888888";
+	private static String TRAFIC_API_SERVER_URL = "http://58.215.184.18:8080";
 	
 	private static ContestWeiboContent weiboContent;
 	private static SinaWeibo sinaWeibo;
@@ -50,6 +51,7 @@ public class ContestWeiboPusher {
 		if (type.equals("start")){ 
 			sendContestStartWeibo(sinaAccessToken, tencentAccessToken,
 					tencentOpenKey, contestId);
+			return;
 		} 
 		else {
 			sendContestEndingWeibo(sinaAccessToken, tencentAccessToken,
@@ -84,6 +86,7 @@ public class ContestWeiboPusher {
 		tencentWeibo = new TencentWeibo(weiboContent);
 		
 		final String posterUrl = weiboContent.getPosterUrl(); // "/home/larmbr/Downloads/dog.jpg";//
+		final String posterPath = "/data"+posterUrl.substring(25); // 跳过"http://58.215.184.18:8080",一共25个字符
 		final String text = "#"+contestSubject+"# 开始啦！ 本次画画大赛时间从"+startDate+"到"+endingDate+
 				"截止, 进入游戏了解更多比赛详情。 快快来参加比赛一展才华吧！ 期待你的参与哦！";
 		
@@ -91,7 +94,7 @@ public class ContestWeiboPusher {
 		Thread sina = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				sinaWeibo.sendOneSinaWeibo(sinaAccessToken, posterUrl, text);
+				sinaWeibo.sendOneSinaWeibo(sinaAccessToken, posterPath, text);
 			}
 		});
 		sina.start();
@@ -100,7 +103,7 @@ public class ContestWeiboPusher {
 		Thread tencent = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				tencentWeibo.sendOneTencentWeibo(tencentAccessToken, tencentOpenKey, posterUrl, text);
+				tencentWeibo.sendOneTencentWeibo(tencentAccessToken, tencentOpenKey, posterPath, text);
 			}
 		});
 		tencent.start();
@@ -178,7 +181,7 @@ public class ContestWeiboPusher {
 			String QQId = weiboContent.getQQId(i);
 			String nickName = weiboContent.getNickName(i);
 			String drawingPath = weiboContent.getdrawing(i);
-			String drawingUrl = "http://58.215.184.18:8080"+drawingPath.substring(5); // skip the part /data
+			String drawingUrl = TRAFIC_API_SERVER_URL+drawingPath.substring(5); // skip the part /data
 			
 			result.append("=========== No." +(i+1) +" ==========\n");
 			result.append("SinaId: " + sinaId);

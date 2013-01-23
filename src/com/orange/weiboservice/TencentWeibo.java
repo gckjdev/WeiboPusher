@@ -8,11 +8,11 @@ import com.tencent.weibo.oauthv2.OAuthV2;
  * Get AccessToken
  * step 1 :
  * https://open.t.qq.com/cgi-bin/oauth2/authorize?client_id=801123669&response_type=code&redirect_uri=http://caicaihuahua.me
- *    then write down the [code] and the [openkey]
+ *    记下 [code]和[openkey] 后面要用
  *    
  * step 2 :
  *  https://open.t.qq.com/cgi-bin/oauth2/access_token?client_id=801123669&client_secret=30169d80923b984109ee24ade9914a5c&redirect_uri=http://caicaihuahua.me&grant_type=authorization_code&code=YOUR_CODE
- *  	then write down the [access token]
+ *  	填入上一步的code， 结果会获得 [access token]
  *  
  *  
  *  Renew access token
@@ -69,7 +69,7 @@ public class TencentWeibo {
 				QQId = "@"+QQId;
 			}
 			String text = "#"+contestSubject+"#结束啦！  恭喜" + QQId + " 在参赛的"+participatorCount+"名玩家中脱颖而出， " 
-				      +"荣获第"+(i+1)+"名。 让我们期待下一次比赛吧，敬请关注@drawlively 。";
+				      +"荣获第"+(i+1)+"名。 让我们期待下一次比赛吧，敬请关注@drawlively 。 ";
 
 			sendOneTencentWeibo(accessToken, openKey, drawingPath, text);
 //			sendOneTencentWeibo(accessToken, openKey, "/home/larmbr/Downloads/dog.jpg", text);
@@ -98,7 +98,7 @@ public class TencentWeibo {
          
         oAuth.setAccessToken(accessToken);
         
-        TAPI tAPI=new TAPI(oAuth.getOauthVersion());
+        TAPI tAPI = new TAPI(oAuth.getOauthVersion());
         
         String format = "json"; // 返回格式
         String clientip = "127.0.0.1";   // 用户IP(以分析用户所在地
