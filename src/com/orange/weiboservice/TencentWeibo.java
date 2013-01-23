@@ -8,11 +8,11 @@ import com.tencent.weibo.oauthv2.OAuthV2;
  * Get AccessToken
  * step 1 :
  * https://open.t.qq.com/cgi-bin/oauth2/authorize?client_id=801123669&response_type=code&redirect_uri=http://caicaihuahua.me
- *    then write down the [code] and the [openkey]
+ *    记下 [code]和[openkey] 后面要用
  *    
  * step 2 :
  *  https://open.t.qq.com/cgi-bin/oauth2/access_token?client_id=801123669&client_secret=30169d80923b984109ee24ade9914a5c&redirect_uri=http://caicaihuahua.me&grant_type=authorization_code&code=YOUR_CODE
- *  	then write down the [access token]
+ *  	填入上一步的code， 结果会获得 [access token]
  *  
  *  
  *  Renew access token

@@ -22,6 +22,7 @@ public class ContestWeiboPusher {
 	private static final int TOP_COUNT_WEIBO = 3;
 	// 客服的User ID
 	private final static String CUSTOMER_SERVICE_UID = "888888888888888888888888";
+	private static String TRAFIC_API_SERVER_URL = "http://58.215.184.18:8080";
 	
 	private static ContestWeiboContent weiboContent;
 	private static SinaWeibo sinaWeibo;
@@ -178,7 +179,7 @@ public class ContestWeiboPusher {
 			String QQId = weiboContent.getQQId(i);
 			String nickName = weiboContent.getNickName(i);
 			String drawingPath = weiboContent.getdrawing(i);
-			String drawingUrl = "http://58.215.184.18:8080"+drawingPath.substring(5); // skip the part /data
+			String drawingUrl = TRAFIC_API_SERVER_URL+drawingPath.substring(5); // skip the part /data
 			
 			result.append("=========== No." +(i+1) +" ==========\n");
 			result.append("SinaId: " + sinaId);
