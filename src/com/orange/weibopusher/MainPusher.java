@@ -1,5 +1,7 @@
 package com.orange.weibopusher;
 
+import com.orange.common.log.ServerLog;
+
 public class MainPusher {
 
 	public static void main(String[] args) {
@@ -12,7 +14,7 @@ public class MainPusher {
 			ContestWeiboPusher.sendContestWeibo(args);
 		}
 		else {
-			System.out.println("You must specify a vaild type of weibo to send !!!"
+			ServerLog.info(0, "You must specify a vaild type of weibo to send !!!"
 					+ " Use -Dweibo.type=daily or -Dweibo.type=contest ");
 		}
 	}

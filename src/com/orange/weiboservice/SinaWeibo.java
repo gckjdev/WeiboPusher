@@ -4,6 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import com.orange.common.log.ServerLog;
+
 
 import weibo4j.Timeline;
 import weibo4j.http.ImageItem;
@@ -85,13 +87,13 @@ public class SinaWeibo {
 				Timeline tl = new Timeline();
 				tl.setToken(accessToken);// access_token
 				Status status = tl.UploadStatus(s, pic);
-				System.out.println("Successfully upload the status to ["
+				ServerLog.info(0, "Successfully upload the status to ["
 						+ status.getText() + "].");
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		} catch (Exception ioe) {
-			System.out.println("Failed to read the system input.");
+			ServerLog.info(0, "Failed to read the system input.");
 		}
 	}
 	
