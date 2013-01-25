@@ -69,7 +69,7 @@ public class TencentWeibo {
 				QQId = "@"+QQId;
 			}
 			String text = "#"+contestSubject+"#结束啦！  恭喜" + QQId + " 在参赛的"+participatorCount+"名玩家中脱颖而出， " 
-				      +"荣获第"+(i+1)+"名。 让我们期待下一次比赛吧，敬请关注@drawlively 。";
+				      +"荣获第"+(i+1)+"名。 让我们期待下一次比赛吧，敬请关注@drawlively 。 ";
 
 			sendOneTencentWeibo(accessToken, openKey, drawingPath, text);
 //			sendOneTencentWeibo(accessToken, openKey, "/home/larmbr/Downloads/dog.jpg", text);
@@ -98,7 +98,7 @@ public class TencentWeibo {
          
         oAuth.setAccessToken(accessToken);
         
-        TAPI tAPI=new TAPI(oAuth.getOauthVersion());
+        TAPI tAPI = new TAPI(oAuth.getOauthVersion());
         
         String format = "json"; // 返回格式
         String clientip = "127.0.0.1";   // 用户IP(以分析用户所在地
