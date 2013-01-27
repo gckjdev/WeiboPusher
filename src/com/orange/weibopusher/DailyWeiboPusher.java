@@ -67,7 +67,10 @@ public class DailyWeiboPusher {
 			
 				awardService.chargeAwardCoins(userId, i, AwardType.DAILY);
 				awardService.sendDailyAwardMessage(CUSTOMER_SERVICE_UID, userId, opus, i+1);
+				awardService.insertRankToDB(userId, i+1);
 			}
 		}
+		
+		
 	}
 }

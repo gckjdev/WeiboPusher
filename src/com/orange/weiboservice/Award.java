@@ -1,5 +1,10 @@
 package com.orange.weiboservice;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.bson.types.ObjectId;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.orange.common.mongodb.MongoDBClient;
 import com.orange.game.constants.DBConstants;
 import com.orange.game.model.dao.Message;
@@ -68,5 +73,31 @@ public class Award {
 		
 		MessageManager.creatMessage(dbClient, Message.MessageTypeText, userId, toUserId, 
 				null, message, 0.0, 0.0, null, 0);
+	}
+	
+	public void insertRankToDB(String userId, int rank) {
+		
+		Date date = new Date(System.currentTimeMillis()-7200000);// 因为在12点后发的微博，所以减去2小时以表示前一天
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		DBObject query = new BasicDBObject(DBConstants.F_USERID, new ObjectId(userId));
+		
+		DBObject dailyRankValue = new BasicDBObject();
+		dailyRankValue.put("rank", rank);
+		dailyRankValue.put("date", dateFormat.format(date));
+		
+		DBObject dailyRank = new BasicDBObject();
+		dailyRank.put("daily_rank", dailyRankValue);
+		
+		DBObject update = new BasicDBObject();
+		update.put("$push", dailyRank);
+		
+		dbClient.updateOne(DBConstants.T_USER, query, update);
+	
+	}
+	
+	public static void main(String[] args) {
+		Award.getInstance().insertRankToDB("51037eb844aecd7c06c0e5a8", 1);
+		Award.getInstance().insertRankToDB("51037eb844aecd7c06c0e5a8", 2);
 	}
 }
