@@ -8,8 +8,10 @@ import com.orange.weiboservice.TencentWeibo;
 
 public class DailyWeiboPusher {
 	
-	// 只发前三名
-	private final static int TOP_COUNT = 3; 
+	// 微博只发前三名
+	private final static int WEIBO_TOP_COUNT = 3; 
+	// 奖励发前二十名
+	private final static int AWARD_TOP_COUNT = 20; 
 	// 客服的User ID
 	private final static String CUSTOMER_SERVICE_UID = "888888888888888888888888";
 	
@@ -18,7 +20,7 @@ public class DailyWeiboPusher {
 	private final static int OPTION_TENCENT = 1<<1; // 二进制 010, 发腾讯微博 
 	private final static int OPTION_AWARD   = 1;    // 二进制 001, 送奖励并发信息告知 
 	
-	private static DailyWeiboContent weiboContent = new DailyWeiboContent(TOP_COUNT);
+	private static DailyWeiboContent weiboContent = new DailyWeiboContent(AWARD_TOP_COUNT);
 	private final static SinaWeibo sinaWeibo = new SinaWeibo(weiboContent);
 	private final static TencentWeibo tencentWeibo = new TencentWeibo(weiboContent);
 	
@@ -39,7 +41,7 @@ public class DailyWeiboPusher {
 			Thread sina = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					sinaWeibo.sendDailySinaWeibo(sinaAccessToken, TOP_COUNT);
+					sinaWeibo.sendDailySinaWeibo(sinaAccessToken, WEIBO_TOP_COUNT);
 				}
 			});
 			sina.start();
@@ -52,7 +54,7 @@ public class DailyWeiboPusher {
 			Thread tencent = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					tencentWeibo.sendDailyTencentWeibo(tencentAccessToken, tencentOpenKey, TOP_COUNT);
+					tencentWeibo.sendDailyTencentWeibo(tencentAccessToken, tencentOpenKey, WEIBO_TOP_COUNT);
 				}
 			});
 			tencent.start();
@@ -61,13 +63,16 @@ public class DailyWeiboPusher {
 		// 附加业务，奖励金币，并发私信告知
 		if ( (option & OPTION_AWARD) == OPTION_AWARD) {
 			Award awardService = Award.getInstance();
-			for (int i = TOP_COUNT-1; i >= 0; i--) {
+			for (int i = AWARD_TOP_COUNT-1; i >= 0; i--) {
 				String userId = weiboContent.getUserId(i);
 				String opus = weiboContent.getWord(i);
 			
 				awardService.chargeAwardCoins(userId, i, AwardType.DAILY);
 				awardService.sendDailyAwardMessage(CUSTOMER_SERVICE_UID, userId, opus, i+1);
-				awardService.insertRankToDB(userId, i+1);
+				if ( i < WEIBO_TOP_COUNT ) {
+					// 前三名才在数据库中插入记录
+					awardService.insertRankToDB(userId, i+1);
+				}
 			}
 		}
 		
