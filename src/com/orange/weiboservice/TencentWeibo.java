@@ -101,7 +101,7 @@ public class TencentWeibo {
         TAPI tAPI = new TAPI(oAuth.getOauthVersion());
         
         String format = "json"; // 返回格式
-        String clientip = "127.0.0.1";   // 用户IP(以分析用户所在地
+        String clientip = "127.0.0.1";   // 用户IP(以分析用户所在地)
         String longitude = null; // 经度
         String latitude = null; // 纬度 
         String syncFlag = ""; // 微博同步到空间分享标记（可选，0-同步，1-不同步，默认为0）  
