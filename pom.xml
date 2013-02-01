@@ -8,7 +8,6 @@
 			<name>local nexus</name>
 			<url>http://localhost:8091/nexus/content/groups/public</url>
 		</repository> 
--->
 		<repository>
 			<id>nexus</id>
 			<name>local nexus</name>
@@ -19,6 +18,7 @@
 			<name>Maven Central Repo1</name>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
+-->
 	</repositories>
 
 	<modelVersion>4.0.0</modelVersion>

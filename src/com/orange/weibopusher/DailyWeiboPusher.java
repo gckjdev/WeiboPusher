@@ -8,9 +8,9 @@ import com.orange.weiboservice.TencentWeibo;
 
 public class DailyWeiboPusher {
 	
-	// 微博只发前三名
+	// 发前三名微博
 	private final static int WEIBO_TOP_COUNT = 3; 
-	// 奖励发前二十名
+	// 奖励前二十名
 	private final static int AWARD_TOP_COUNT = 20; 
 	// 客服的User ID
 	private final static String CUSTOMER_SERVICE_UID = "888888888888888888888888";
@@ -50,11 +50,10 @@ public class DailyWeiboPusher {
 		// 发腾讯微博
 		if ( (option & OPTION_TENCENT) == OPTION_TENCENT) {
 			final String tencentAccessToken = args[1];
-			final String tencentOpenKey = args[2];
 			Thread tencent = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					tencentWeibo.sendDailyTencentWeibo(tencentAccessToken, tencentOpenKey, WEIBO_TOP_COUNT);
+					tencentWeibo.sendDailyTencentWeibo(tencentAccessToken, WEIBO_TOP_COUNT);
 				}
 			});
 			tencent.start();

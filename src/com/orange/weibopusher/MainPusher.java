@@ -7,10 +7,10 @@ public class MainPusher {
 	public static void main(String[] args) {
 		
 		String weiboType = System.getProperty("weibo_type");
-		if ( weiboType != null && weiboType.equals("daily")) {
+		if ( weiboType != null && weiboType.equalsIgnoreCase("daily")) {
 			DailyWeiboPusher.sendDailyWeibo(args);
 		} 
-		else if ( weiboType != null &&  weiboType.equals("contest")) {
+		else if ( weiboType != null &&  weiboType.equalsIgnoreCase("contest")) {
 			ContestWeiboPusher.sendContestWeibo(args);
 		}
 		else {

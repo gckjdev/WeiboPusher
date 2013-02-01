@@ -8,7 +8,7 @@ import com.tencent.weibo.oauthv2.OAuthV2;
  * Get AccessToken
  * step 1 :
  * https://open.t.qq.com/cgi-bin/oauth2/authorize?client_id=801123669&response_type=code&redirect_uri=http://caicaihuahua.me
- *    记下 [code]和[openkey] 后面要用
+ *    记下 [code]备用
  *    
  * step 2 :
  *  https://open.t.qq.com/cgi-bin/oauth2/access_token?client_id=801123669&client_secret=30169d80923b984109ee24ade9914a5c&redirect_uri=http://caicaihuahua.me&grant_type=authorization_code&code=YOUR_CODE
@@ -20,6 +20,11 @@ import com.tencent.weibo.oauthv2.OAuthV2;
  */
 public class TencentWeibo {
 
+	private final String CLIENT_ID = "801123669";
+	private final String CLIENT_SECRET = "30169d80923b984109ee24ade9914a5c";
+	private final String REDIRECT_URI = "http://caicaihuahua.me";
+	private final String OPEN_ID = "3002527FED5211195D60F934E5AF75AD";
+	
 
 	private final  CommonWeiboContent weiboContent;
 	
@@ -27,7 +32,7 @@ public class TencentWeibo {
 		this.weiboContent = content;
 	}
 	
-	public void sendDailyTencentWeibo(String accessToken, String openKey, int topCount) {
+	public void sendDailyTencentWeibo(String accessToken, int topCount) {
 
 		for (int i = topCount-1; i >= 0; i--) {
 			String drawingPath = weiboContent.getdrawing(i);
@@ -42,8 +47,8 @@ public class TencentWeibo {
 			String text = "今日#猜猜画画作品榜#第" + (i + 1) + "名：" + QQId + " 的【" + word
 			+ "】。欣赏每日精彩涂鸦, 获取猜猜画画最新动态，敬请关注@drawlively 。";
 
-			sendOneTencentWeibo(accessToken, openKey, drawingPath, text);
-//			sendOneTencentWeibo(accessToken, openKey, "/home/larmbr/Downloads/dog.jpg", "最后一条测试微博"+i);
+			sendOneTencentWeibo(accessToken, drawingPath, text);
+//			sendOneTencentWeibo(accessToken,  "/home/larmbr/Downloads/drawlively.jpg", "一条测试微博 "+i);
 			
 			// 不能频繁发微博
 			try {
@@ -55,7 +60,7 @@ public class TencentWeibo {
 	}
 
 	
-	public void sendContestTencentWeibo(String accessToken, String openKey, int topCount) {
+	public void sendContestTencentWeibo(String accessToken, int topCount) {
 		
 		for (int i = topCount-1; i >= 0; i--) {
 			String drawingPath = weiboContent.getdrawing(i);
@@ -71,8 +76,7 @@ public class TencentWeibo {
 			String text = "#"+contestSubject+"#结束啦！  恭喜" + QQId + " 在参赛的"+participatorCount+"名玩家中脱颖而出， " 
 				      +"荣获第"+(i+1)+"名。 让我们期待下一次比赛吧，敬请关注@drawlively 。 ";
 
-			sendOneTencentWeibo(accessToken, openKey, drawingPath, text);
-//			sendOneTencentWeibo(accessToken, openKey, "/home/larmbr/Downloads/dog.jpg", text);
+			sendOneTencentWeibo(accessToken, drawingPath, text);
 			
 			// 不能频繁发微博
 			try {
@@ -84,16 +88,14 @@ public class TencentWeibo {
 	}
 	
 	
-	public void sendOneTencentWeibo(String accessToken, String openKey, String drawingPath, String text) {
+	public void sendOneTencentWeibo(String accessToken, String drawingPath, String text) {
 
 		  OAuthV2 oAuth = new OAuthV2();
 		  
-		  oAuth.setClientId("801123669");
-        oAuth.setClientSecret("30169d80923b984109ee24ade9914a5c");
-        oAuth.setRedirectUri("http://caicaihuahua.me");
-        oAuth.setOpenid("3002527FED5211195D60F934E5AF75AD");
-        oAuth.setOpenkey("D0557CED6D7BAF8041D4A032A9B62AA5");
-        oAuth.setOpenkey(openKey);
+		  oAuth.setClientId(CLIENT_ID);
+        oAuth.setClientSecret(CLIENT_SECRET);
+        oAuth.setRedirectUri(REDIRECT_URI);
+        oAuth.setOpenid(OPEN_ID);
         oAuth.setExpiresIn("1209600"); // 14天
          
         oAuth.setAccessToken(accessToken);
