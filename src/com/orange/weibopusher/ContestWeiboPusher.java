@@ -16,29 +16,26 @@ import com.orange.weiboservice.CommonWeiboContent;
 
 public class ContestWeiboPusher {
 
+	// 发前三名微博(剩下7名手工合成一张图片再发)
+	private static final int WEIBO_TOP_COUNT = 3;
 	// 奖励前十名
-	private static final int TOP_COUNT_AWARD = 10;
-	// 发前三名微博
-	private static final int TOP_COUNT_WEIBO = 3;
+	private static final int AWARD_TOP_COUNT = 10;
 	// 客服的User ID
 	private final static String CUSTOMER_SERVICE_UID = "888888888888888888888888";
 	private static String TRAFIC_API_SERVER_URL = "http://58.215.184.18:8080";
 	
 	private static ContestWeiboContent weiboContent;
-	private static SinaWeibo sinaWeibo;
-	private static TencentWeibo tencentWeibo;
 	
 //	public static void main(String[] args) {
 	public static void sendContestWeibo(String...args) {
 
 		final String sinaAccessToken = args[0]; 
 		final String tencentAccessToken = args[1];
-		final String tencentOpenKey = args[2];
 		
 		String type = System.getProperty("contest_weibo_type");
 		if ( type == null ) {
 			ServerLog.info(0, " You must specify which contest type of weibo, like -Dcontest_weibo_tye=start or " +
-					" -Dcontest_weibo_tye=end .");
+					" -Dcontest_weibo_type=end or -Dcontest_weibo_type=ending_info .");
 			return;
 		}
 		
@@ -48,44 +45,52 @@ public class ContestWeiboPusher {
 			return;
 		}
 		
-		if (type.equals("start")){ 
-			sendContestStartWeibo(sinaAccessToken, tencentAccessToken,
-					tencentOpenKey, contestId);
-			return;
+		
+		if (type.equalsIgnoreCase("start")) {
+				// 比赛开始时发微博
+				sendContestStartWeibo(sinaAccessToken, tencentAccessToken, contestId);
+				return;
+		}
+		else if (type.equalsIgnoreCase("ending_info")) {
+				// 比赛结束后生成4-10名玩家信息文件, 即
+				// 第4-第10名的ID, 作品url输出到一个文件，以便合成图片后人工发微博
+				writeOtherAwarderInfoToFile("/root/weibo_pusher/awarder_info_4-10", contestId, 3, 9);
+				return;
+		}
+		else if (type.equalsIgnoreCase("ending")) {
+				// 发前三名微博
+				sendContestEndingWeibo(sinaAccessToken, tencentAccessToken, contestId);
+				// 附加业务，奖励金币，并发私信告知
+				Award awardService = Award.getInstance();
+				for (int i = AWARD_TOP_COUNT -1; i >= 0; i--) {
+					String userId = weiboContent.getUserId(i);
+					String contestSubject = weiboContent.getContestSubject();
+					int participatorCount = weiboContent.getParticipatorCount();
+				
+					awardService.chargeAwardCoins(userId, i, AwardType.CONTEST);
+					awardService.sendContestAwardMessage(CUSTOMER_SERVICE_UID, userId, contestSubject, i+1, participatorCount);
+				}
+				return;
 		} 
 		else {
-			sendContestEndingWeibo(sinaAccessToken, tencentAccessToken,
-					tencentOpenKey, contestId);
-		}
-		
-		// 附加业务，奖励金币，并发私信告知
-		Award awardService = Award.getInstance();
-		for (int i = TOP_COUNT_AWARD -1; i >= 0; i--) {
-			String userId = weiboContent.getUserId(i);
-			String contestSubject = weiboContent.getContestSubject();
-			int participatorCount = weiboContent.getParticipatorCount();
-		
-			awardService.chargeAwardCoins(userId, i, AwardType.CONTEST);
-			awardService.sendContestAwardMessage(CUSTOMER_SERVICE_UID, userId, contestSubject, i+1, participatorCount);
-		}
-		
-		// 附加业务， 第4-第10名的ID, 作品url输出到一个文件，以便合成图片后人工发微博
-		writeOtherAwarderInfoToFile("/root/weibo_pusher/awarder_info_4-10", weiboContent, 3, 9);
-//		writeOtherAwarderInfoToFile("/home/larmbr/test", weiboContent, 3, 9);
+				ServerLog.info(0, "Unsupprt contest weibo type !!!");
+				return;
+		} 
 	}
 
 
 	private static void sendContestStartWeibo(final String sinaAccessToken,
-			final String tencentAccessToken, final String tencentOpenKey, final String contestId) {
+			final String tencentAccessToken, final String contestId) {
 		
-		weiboContent = new ContestWeiboContent(WeiboType.CONTEST_START, TOP_COUNT_AWARD, contestId);
+		weiboContent = new ContestWeiboContent(WeiboType.CONTEST_START, AWARD_TOP_COUNT, contestId);
 		String contestSubject = weiboContent.getContestSubject();
 		String startDate = weiboContent.getStartDateString();
 		String endingDate = weiboContent.getEndingDateString();
-		sinaWeibo = new SinaWeibo(weiboContent);
-		tencentWeibo = new TencentWeibo(weiboContent);
 		
-		final String posterUrl = weiboContent.getPosterUrl(); // "/home/larmbr/Downloads/dog.jpg";//
+		final SinaWeibo sinaWeibo = new SinaWeibo(weiboContent);
+		final TencentWeibo tencentWeibo = new TencentWeibo(weiboContent);
+		
+		final String posterUrl = weiboContent.getPosterUrl(); 
 		final String posterPath = "/data"+posterUrl.substring(25); // 跳过"http://58.215.184.18:8080",一共25个字符
 		final String text = "#"+contestSubject+"# 开始啦！ 本次画画大赛时间从"+startDate+"到"+endingDate+
 				"截止, 进入游戏了解更多比赛详情。 快快来参加比赛一展才华吧！ 期待你的参与哦！";
@@ -103,7 +108,7 @@ public class ContestWeiboPusher {
 		Thread tencent = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				tencentWeibo.sendOneTencentWeibo(tencentAccessToken, tencentOpenKey, posterPath, text);
+				tencentWeibo.sendOneTencentWeibo(tencentAccessToken, posterPath, text);
 			}
 		});
 		tencent.start();
@@ -111,17 +116,18 @@ public class ContestWeiboPusher {
 	
 
 	private static void sendContestEndingWeibo(final String sinaAccessToken,
-			final String tencentAccessToken, final String tencentOpenKey, final String contestId) {
+			final String tencentAccessToken,  final String contestId) {
 		
-		weiboContent = new ContestWeiboContent(WeiboType.CONTEST_ENDING, TOP_COUNT_AWARD, contestId);
-		sinaWeibo = new SinaWeibo(weiboContent);
-		tencentWeibo = new TencentWeibo(weiboContent);
+		weiboContent = new ContestWeiboContent(WeiboType.CONTEST_ENDING, AWARD_TOP_COUNT, contestId);
+		
+		final SinaWeibo sinaWeibo = new SinaWeibo(weiboContent);
+		final TencentWeibo tencentWeibo = new TencentWeibo(weiboContent);
 
 		// 发新浪微博
 		Thread sina = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				sinaWeibo.sendContestSinaWeibo(sinaAccessToken, TOP_COUNT_WEIBO);
+				sinaWeibo.sendContestSinaWeibo(sinaAccessToken, WEIBO_TOP_COUNT);
 			}
 		});
 		sina.start();
@@ -130,21 +136,27 @@ public class ContestWeiboPusher {
 		Thread tencent = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				tencentWeibo.sendContestTencentWeibo(tencentAccessToken, tencentOpenKey, TOP_COUNT_WEIBO);
+				tencentWeibo.sendContestTencentWeibo(tencentAccessToken, WEIBO_TOP_COUNT);
 			}
 		});
 		tencent.start();
 	}
 
 
-	private static void writeOtherAwarderInfoToFile(String filePath, CommonWeiboContent weiboContent,
+	private static void writeOtherAwarderInfoToFile(String filePath, String contestId, 
 			int startIndex, int endIndex) {
 		
+		weiboContent = new ContestWeiboContent(WeiboType.CONTEST_ENDING, AWARD_TOP_COUNT, contestId);
+		if ( weiboContent == null ) {
+			System.out.println("! Get weibo content fails");
+			return;
+		}
+		
 		boolean success = true;
-		ServerLog.info(0, "Generating awarder info file....");
+		System.out.println("* Generating awarder info file....");
 		String content = generateContent(weiboContent, startIndex, endIndex);
 		if ( content == null ) {
-			ServerLog.info(0, "Generating info fails. Please check !");
+			System.out.println("! Generating info fails. Please check !");
 			return;
 		}
 	   try {
@@ -152,9 +164,9 @@ public class ContestWeiboPusher {
 	       if (file.exists()) {
 	     	    file.delete();
 	       } else {
-	          ServerLog.info(0, "Creating file :" + filePath +" ...");
+	    	   System.out.println("*  Creating file :" + filePath +" ...");
 	          if ( ! file.createNewFile()) {
-	        	    ServerLog.info(0, "Creating file " + filePath + " fails ... ");
+	        	  System.out.println("*  Creating file " + filePath + " fails ... ");
 	        	    success = false; 
 	           	  }
 	         }	   
@@ -162,13 +174,13 @@ public class ContestWeiboPusher {
 	       output.write(content);
 	       output.close();
 	   } catch (Exception e) {
-		   ServerLog.info(0, "Generating file failed due to " + e.toString() +
+		   System.out.println("! Generating file failed due to " + e.toString() +
 		   "\nOutput to console : \n" +  content);
 		   success = false;
 	   } 
 	  
 	   if (success) {
-		   ServerLog.info(0, "Generating awarder info done !");
+		   System.out.println("* Generating awarder info done !");
 	    }
 	}
 
