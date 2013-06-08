@@ -23,18 +23,18 @@ public class Award {
 			int[] coins() { 
 				// 前20名的金币奖励
 				int[] results = {1000, 900, 800, 700, 600,
-										 500,  388,  388,  388,   388,
-									     388,  388,  388,  388,   388,
-									     388,  388,  388,  388,   388,
-									  };
+								  500,  388,  388,  388,   388,
+							      388,  388,  388,  388,   388,
+					    	      388,  388,  388,  388,   388,
+							    };
 				return results;
 			}
 		},
 		CONTEST {
 			int[] coins() { 
 				// 前10名的金币奖励
-				int[] results = {20000, 10000, 5000, 2000, 2000,
-						               2000,    2000,    2000,  2000,  2000, };
+				int[] results = {20000, 15000, 10000, 5000, 5000,
+						         5000,   5000,  5000, 5000, 5000, };
 				return results;
 			}
 		};
@@ -66,7 +66,7 @@ public class Award {
 				"腾讯微博[@drawlively]获取每天新鲜画榜!";
 		
 		MessageManager.creatMessage(dbClient, Message.MessageTypeText, userId, toUserId, 
-				null, message, 0.0, 0.0, null, 0);
+				null, message, 0.0, 0.0, null, 0, null, null);
 	}
 	
 	public void sendContestAwardMessage(String userId, String toUserId, String contestSubject, int rank, int participatorCount) {
@@ -76,7 +76,7 @@ public class Award {
 				"腾讯微博[@drawlively]获取每天新鲜画榜!";
 		
 		MessageManager.creatMessage(dbClient, Message.MessageTypeText, userId, toUserId, 
-				null, message, 0.0, 0.0, null, 0);
+				null, message, 0.0, 0.0, null, 0, null, null);
 	}
 	
 	public void insertRankToDB(String userId, int rank) {
