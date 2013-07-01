@@ -4,3 +4,5 @@
 /logs/
 /bin/
 build.sh
+deploy.sh
+.settings/

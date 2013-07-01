@@ -1,6 +1,7 @@
 package com.orange.weiboservice;
 
 
+import com.orange.weiboservice.WeiboApp.App;
 import com.tencent.weibo.api.TAPI;
 import com.tencent.weibo.oauthv2.OAuthV2;
 
@@ -20,16 +21,18 @@ import com.tencent.weibo.oauthv2.OAuthV2;
  */
 public class TencentWeibo {
 
-	private final String CLIENT_ID = "801123669";
-	private final String CLIENT_SECRET = "30169d80923b984109ee24ade9914a5c";
 	private final String REDIRECT_URI = "http://caicaihuahua.me";
-	private final String OPEN_ID = "3002527FED5211195D60F934E5AF75AD";
-	
 
 	private final  CommonWeiboContent weiboContent;
+	private final  String clientID;
+	private final  String clientSecret;
+	private final  String openID;
 	
-	public TencentWeibo(CommonWeiboContent content) {
+	public TencentWeibo(CommonWeiboContent content, String clientID, String clientSecret, String openID) {
 		this.weiboContent = content;
+		this.clientID = clientID;
+		this.clientSecret = clientSecret;
+		this.openID = openID;
 	}
 	
 	public void sendDailyTencentWeibo(String accessToken, int topCount) {
@@ -59,6 +62,34 @@ public class TencentWeibo {
 		}
 	}
 
+	
+	public void sendDailyTencentWeibo(String accessToken, int topCount, App app) {
+
+		for (int i = topCount-1; i >= 0; i--) {
+			String drawingPath = weiboContent.getdrawing(i);
+			String QQId = weiboContent.getQQId(i);
+			String word = weiboContent.getWord(i);
+			
+			if (QQId == null) {
+				QQId = "玩家" + weiboContent.getNickName(i);
+			} else {
+				QQId = "@"+QQId;
+			}
+			String text = "今日#" + app.getAppName() + "作品榜#第" + (i + 1) + "名：" + QQId + " 的【" + word
+			+ "】。欣赏每日精彩涂鸦, 获取" + app.getAppName() + "最新动态，敬请关注@" + app.getTencentNick() +" 。";
+
+			sendOneTencentWeibo(accessToken, drawingPath, text);
+//			sendOneTencentWeibo(accessToken,  "/home/larmbr/Downloads/drawlively.jpg", "一条测试微博 "+i);
+			
+			// 不能频繁发微博
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	public void sendContestTencentWeibo(String accessToken, int topCount) {
 		
@@ -90,12 +121,12 @@ public class TencentWeibo {
 	
 	public void sendOneTencentWeibo(String accessToken, String drawingPath, String text) {
 
-		  OAuthV2 oAuth = new OAuthV2();
+		OAuthV2 oAuth = new OAuthV2();
 		  
-		  oAuth.setClientId(CLIENT_ID);
-        oAuth.setClientSecret(CLIENT_SECRET);
+		oAuth.setClientId(clientID);
+        oAuth.setClientSecret(clientSecret);
         oAuth.setRedirectUri(REDIRECT_URI);
-        oAuth.setOpenid(OPEN_ID);
+        oAuth.setOpenid(openID);
         oAuth.setExpiresIn("1209600"); // 14天
          
         oAuth.setAccessToken(accessToken);
