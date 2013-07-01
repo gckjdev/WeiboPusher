@@ -2,6 +2,7 @@ package com.orange.weibopusher;
 
 import com.orange.weiboservice.Award;
 import com.orange.weiboservice.Award.AwardType;
+import com.orange.weiboservice.WeiboApp.App;
 import com.orange.weiboservice.DailyWeiboContent;
 import com.orange.weiboservice.SinaWeibo;
 import com.orange.weiboservice.TencentWeibo;
@@ -22,10 +23,23 @@ public class DailyWeiboPusher {
 	
 	private static DailyWeiboContent weiboContent = new DailyWeiboContent(AWARD_TOP_COUNT);
 	private final static SinaWeibo sinaWeibo = new SinaWeibo(weiboContent);
-	private final static TencentWeibo tencentWeibo = new TencentWeibo(weiboContent);
 	
 	
-//	public static void main(String[] args) {
+	private final static String drawTencentClientId = App.Draw.getTencentClientId();
+	private final static String drawTencentClientSecret = App.Draw.getTencentClientSecret();
+	private final static String drawTencentOpenID = App.Draw.getTencentOpenID();
+	private final static TencentWeibo drawTencentWeibo = 
+			new TencentWeibo(weiboContent, drawTencentClientId, drawTencentClientSecret, drawTencentOpenID);
+	
+	
+	private final static String xiaojiTencentClientId = App.Xiaoji.getTencentClientId();
+	private final static String xiaojiTencentClientSecret = App.Xiaoji.getTencentClientSecret();
+	private final static String xiaojiTencentOpenID = App.Xiaoji.getTencentOpenID();
+	private final static TencentWeibo xiaojiTencentWeibo = 
+			new TencentWeibo(weiboContent, xiaojiTencentClientId, xiaojiTencentClientSecret,xiaojiTencentOpenID);
+	
+
+	
 	public static void sendDailyWeibo(String...args) {
 
 		int option = 7; // 111
@@ -37,11 +51,13 @@ public class DailyWeiboPusher {
 		
 		// 发新浪微博
 		if ( (option & OPTION_SINA) == OPTION_SINA) {
-			final String sinaAccessToken = args[0]; 
+			final String drawAccessToken = args[0];
+			final String xiaojiAccessToken = args[2];
 			Thread sina = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					sinaWeibo.sendDailySinaWeibo(sinaAccessToken, WEIBO_TOP_COUNT);
+					sinaWeibo.sendDailySinaWeibo(App.Draw, drawAccessToken, WEIBO_TOP_COUNT);
+					sinaWeibo.sendDailySinaWeibo(App.Xiaoji, xiaojiAccessToken, WEIBO_TOP_COUNT);
 				}
 			});
 			sina.start();
@@ -49,11 +65,12 @@ public class DailyWeiboPusher {
 		
 		// 发腾讯微博
 		if ( (option & OPTION_TENCENT) == OPTION_TENCENT) {
-			final String tencentAccessToken = args[1];
+			final String drawQQAccessToken = args[1];
+			final String xiaojiQQAccessToken = args[3];
 			Thread tencent = new Thread(new Runnable() {
-				@Override
 				public void run() {
-					tencentWeibo.sendDailyTencentWeibo(tencentAccessToken, WEIBO_TOP_COUNT);
+					drawTencentWeibo.sendDailyTencentWeibo(drawQQAccessToken, WEIBO_TOP_COUNT, App.Draw);
+					xiaojiTencentWeibo.sendDailyTencentWeibo(xiaojiQQAccessToken, WEIBO_TOP_COUNT, App.Xiaoji);
 				}
 			});
 			tencent.start();

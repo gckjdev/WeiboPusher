@@ -7,11 +7,11 @@ import java.io.FileWriter;
 
 import com.orange.common.log.ServerLog;
 import com.orange.weiboservice.Award;
-import com.orange.weiboservice.Award.AwardType;
 import com.orange.weiboservice.ContestWeiboContent;
 import com.orange.weiboservice.SinaWeibo;
 import com.orange.weiboservice.TencentWeibo;
 import com.orange.weiboservice.ContestWeiboContent.WeiboType;
+import com.orange.weiboservice.WeiboApp.App;
 import com.orange.weiboservice.CommonWeiboContent;
 
 public class ContestWeiboPusher {
@@ -26,11 +26,12 @@ public class ContestWeiboPusher {
 	
 	private static ContestWeiboContent weiboContent;
 	
-//	public static void main(String[] args) {
 	public static void sendContestWeibo(String...args) {
 
-		final String sinaAccessToken = args[0]; 
-		final String tencentAccessToken = args[1];
+		final String drawSinaAccessToken = args[0];
+		final String drawTencentAccessToken = args[1];
+		final String xiaojiSinaAccessToken = args[2];
+		final String xiaojiTencentAccessToken = args[3];
 		
 		String type = System.getProperty("contest_weibo_type");
 		if ( type == null ) {
@@ -48,7 +49,8 @@ public class ContestWeiboPusher {
 		
 		if (type.equalsIgnoreCase("start")) {
 				// 比赛开始时发微博
-				sendContestStartWeibo(sinaAccessToken, tencentAccessToken, contestId);
+				sendContestStartWeibo(App.Draw, drawSinaAccessToken, drawTencentAccessToken, contestId);
+				sendContestStartWeibo(App.Xiaoji, xiaojiSinaAccessToken, xiaojiTencentAccessToken, contestId);
 				return;
 		}
 		else if (type.equalsIgnoreCase("ending_info")) {
@@ -59,7 +61,9 @@ public class ContestWeiboPusher {
 		}
 		else if (type.equalsIgnoreCase("ending")) {
 				// 发前三名微博
-				sendContestEndingWeibo(sinaAccessToken, tencentAccessToken, contestId);
+				sendContestEndingWeibo(App.Draw, drawSinaAccessToken, drawTencentAccessToken, contestId);
+				sendContestEndingWeibo(App.Xiaoji, xiaojiSinaAccessToken, xiaojiTencentAccessToken, contestId);
+				
 				// 附加业务，奖励金币，并发私信告知
 				Award awardService = Award.getInstance();
 				for (int i = AWARD_TOP_COUNT -1; i >= 0; i--) {
@@ -79,7 +83,7 @@ public class ContestWeiboPusher {
 	}
 
 
-	private static void sendContestStartWeibo(final String sinaAccessToken,
+	private static void sendContestStartWeibo(App app, final String sinaAccessToken,
 			final String tencentAccessToken, final String contestId) {
 		
 		weiboContent = new ContestWeiboContent(WeiboType.CONTEST_START, AWARD_TOP_COUNT, contestId);
@@ -88,12 +92,13 @@ public class ContestWeiboPusher {
 		String endingDate = weiboContent.getEndingDateString();
 		
 		final SinaWeibo sinaWeibo = new SinaWeibo(weiboContent);
-		final TencentWeibo tencentWeibo = new TencentWeibo(weiboContent);
+		final TencentWeibo tencentWeibo = new TencentWeibo(weiboContent, app.getTencentClientId(), 
+					 app.getTencentClientSecret(), app.getTencentOpenID());
 		
 		final String posterUrl = weiboContent.getPosterUrl(); 
 		final String posterPath = "/data"+posterUrl.substring(25); // 跳过"http://58.215.184.18:8080",一共25个字符
-		final String text = "#"+contestSubject+"# 开始啦！ 本次画画大赛时间从"+startDate+"到"+endingDate+
-				"截止, 进入游戏了解更多比赛详情。 快快来参加比赛一展才华吧！ 期待你的参与哦！";
+		final String text = "新一次画画大赛开始啦！ 本次画画大赛主题是#"+contestSubject+"#， 时间从"+startDate+"到"+endingDate+
+				", 请进入游戏了解更多比赛详情。 快快来参加比赛一展才华吧！ 期待你的参与哦！";
 		
 		// 发新浪微博
 		Thread sina = new Thread(new Runnable() {
@@ -115,19 +120,20 @@ public class ContestWeiboPusher {
 	}
 	
 
-	private static void sendContestEndingWeibo(final String sinaAccessToken,
+	private static void sendContestEndingWeibo(App app, final String sinaAccessToken,
 			final String tencentAccessToken,  final String contestId) {
 		
 		weiboContent = new ContestWeiboContent(WeiboType.CONTEST_ENDING, AWARD_TOP_COUNT, contestId);
 		
 		final SinaWeibo sinaWeibo = new SinaWeibo(weiboContent);
-		final TencentWeibo tencentWeibo = new TencentWeibo(weiboContent);
+		final TencentWeibo tencentWeibo = new TencentWeibo(weiboContent, app.getTencentClientId(), 
+				app.getTencentClientSecret(),app.getTencentOpenID());
 
 		// 发新浪微博
 		Thread sina = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				sinaWeibo.sendContestSinaWeibo(sinaAccessToken, WEIBO_TOP_COUNT);
+				sinaWeibo.sendContestSinaWeibo(App.Draw, sinaAccessToken, WEIBO_TOP_COUNT);
 			}
 		});
 		sina.start();

@@ -4,7 +4,7 @@ import com.orange.common.log.ServerLog;
 
 public class MainPusher {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 		String weiboType = System.getProperty("weibo_type");
 		if ( weiboType != null && weiboType.equalsIgnoreCase("daily")) {

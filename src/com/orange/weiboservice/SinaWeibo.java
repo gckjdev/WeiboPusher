@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import com.orange.common.log.ServerLog;
+import com.orange.weiboservice.WeiboApp.App;
 
 
 import weibo4j.Timeline;
@@ -18,9 +19,9 @@ public class SinaWeibo {
 	public SinaWeibo(CommonWeiboContent content) {
 		this.weiboContent = content;
 	}
+
 	
-   
-	public void sendDailySinaWeibo(String accessToken, int topCount) {
+	public void sendDailySinaWeibo(App app, String accessToken, int topCount) {
 
 		for (int i = topCount-1; i >= 0; i--) {
 			String drawingPath = weiboContent.getdrawing(i);
@@ -32,11 +33,10 @@ public class SinaWeibo {
 			} else {
 				sinaId = "@"+sinaId;
 			}
-			String text = "今日#猜猜画画作品榜#第" + (i + 1) + "名：" + sinaId + " 的【" + word
-			+ "】。欣赏每日精彩涂鸦, 获取猜猜画画最新动态，敬请关注@猜猜画画手机版 。";
+			String text = "今日#" + app.getAppName() + "作品榜#第" + (i + 1) + "名：" + sinaId + " 的【" + word
+			+ "】。欣赏每日精彩涂鸦, 获取"+ app.getAppName()+"最新动态，敬请关注@" + app.getSinaNick() +"。";
 
 			sendOneSinaWeibo(accessToken, drawingPath, text);
-//			sendOneSinaWeibo(accessToken, "/home/larmbr/Downloads/dog.jpg", "一条测试微博"+i);
 			
 			// 不能频繁发微博
 			try {
@@ -49,7 +49,7 @@ public class SinaWeibo {
 
 	
 
-	public void sendContestSinaWeibo(String accessToken, int topCount) {
+	public void sendContestSinaWeibo(App app, String accessToken, int topCount) {
 
 		for (int i = topCount-1; i >= 0; i--) {
 			String drawingPath = weiboContent.getdrawing(i);
@@ -80,19 +80,14 @@ public class SinaWeibo {
 	
 	public void sendOneSinaWeibo(String accessToken, String drawingPath, String text) {
 		try {
-			try {
-				byte[] content = readFileImage(drawingPath);
-				ImageItem pic = new ImageItem("pic", content);
-				String s = java.net.URLEncoder.encode(text, "utf-8");
-				Timeline tl = new Timeline();
-				tl.setToken(accessToken);// access_token
-				Status status = tl.UploadStatus(s, pic);
-				ServerLog.info(0, "Successfully upload the status to ["
-						+ status.getText() + "].");
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		} catch (Exception ioe) {
+			byte[] content = readFileImage(drawingPath);
+			ImageItem pic = new ImageItem("pic", content);
+			String s = java.net.URLEncoder.encode(text, "utf-8");
+			Timeline tl = new Timeline();
+			tl.setToken(accessToken);// access_token
+			Status status = tl.UploadStatus(s, pic);
+			ServerLog.info(0,"Successfully upload the status to [" + status.getText() + "].");
+		} catch (Exception e) {
 			ServerLog.info(0, "Failed to read the system input.");
 		}
 	}
