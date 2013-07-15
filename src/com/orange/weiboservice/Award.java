@@ -20,7 +20,7 @@ public class Award {
 	
 	public enum AwardType {
 		DAILY {
-			int[] coins() { 
+			public int[] coins() { 
 				// 前20名的金币奖励
 				int[] results = {1000, 900, 800, 700, 600,
 								  500,  388,  388,  388,   388,
@@ -31,15 +31,17 @@ public class Award {
 			}
 		},
 		CONTEST {
-			int[] coins() { 
-				// 前10名的金币奖励
+			public int[] coins() { 
+				// 前20名的金币奖励
 				int[] results = {20000, 15000, 10000, 5000, 5000,
+						         5000,   5000,  5000, 5000, 5000, 
+						         5000,   5000,  5000, 5000, 5000, 
 						         5000,   5000,  5000, 5000, 5000, };
 				return results;
 			}
 		};
 		
-		abstract int[] coins();
+		public abstract int[] coins();
 	}
 	 
 	private Award() {}

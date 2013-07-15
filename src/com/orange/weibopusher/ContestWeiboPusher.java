@@ -7,6 +7,7 @@ import java.io.FileWriter;
 
 import com.orange.common.log.ServerLog;
 import com.orange.weiboservice.Award;
+import com.orange.weiboservice.Award.AwardType;
 import com.orange.weiboservice.ContestWeiboContent;
 import com.orange.weiboservice.SinaWeibo;
 import com.orange.weiboservice.TencentWeibo;
@@ -19,7 +20,7 @@ public class ContestWeiboPusher {
 	// 发前三名微博(剩下7名手工合成一张图片再发)
 	private static final int WEIBO_TOP_COUNT = 3;
 	// 奖励前十名
-	private static final int AWARD_TOP_COUNT = 10;
+	private static final int AWARD_TOP_COUNT = AwardType.CONTEST.coins().length;
 	// 客服的User ID
 	private final static String CUSTOMER_SERVICE_UID = "888888888888888888888888";
 	private static String TRAFIC_API_SERVER_URL = "http://58.215.184.18:8080";
@@ -71,7 +72,7 @@ public class ContestWeiboPusher {
 					String contestSubject = weiboContent.getContestSubject();
 					int participatorCount = weiboContent.getParticipatorCount();
 				
-//					awardService.chargeAwardCoins(userId, i, AwardType.CONTEST);
+					awardService.chargeAwardCoins(userId, i, AwardType.CONTEST);
 					awardService.sendContestAwardMessage(CUSTOMER_SERVICE_UID, userId, contestSubject, i+1, participatorCount);
 				}
 				return;

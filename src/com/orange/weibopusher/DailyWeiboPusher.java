@@ -12,7 +12,7 @@ public class DailyWeiboPusher {
 	// 发前三名微博
 	private final static int WEIBO_TOP_COUNT = 3; 
 	// 奖励前二十名
-	private final static int AWARD_TOP_COUNT = 20; 
+	private final static int AWARD_TOP_COUNT = AwardType.DAILY.coins().length; 
 	// 客服的User ID
 	private final static String CUSTOMER_SERVICE_UID = "888888888888888888888888";
 	
