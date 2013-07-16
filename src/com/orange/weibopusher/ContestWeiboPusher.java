@@ -61,6 +61,8 @@ public class ContestWeiboPusher {
 				return;
 		}
 		else if (type.equalsIgnoreCase("ending")) {
+			    weiboContent = new ContestWeiboContent(WeiboType.CONTEST_ENDING, AWARD_TOP_COUNT, contestId);
+			
 				// 发前三名微博
 				sendContestEndingWeibo(App.Draw, drawSinaAccessToken, drawTencentAccessToken, contestId);
 				sendContestEndingWeibo(App.Xiaoji, xiaojiSinaAccessToken, xiaojiTencentAccessToken, contestId);
@@ -121,10 +123,8 @@ public class ContestWeiboPusher {
 	}
 	
 
-	private static void sendContestEndingWeibo(App app, final String sinaAccessToken,
+	private static void sendContestEndingWeibo(final App app, final String sinaAccessToken,
 			final String tencentAccessToken,  final String contestId) {
-		
-		weiboContent = new ContestWeiboContent(WeiboType.CONTEST_ENDING, AWARD_TOP_COUNT, contestId);
 		
 		final SinaWeibo sinaWeibo = new SinaWeibo(weiboContent);
 		final TencentWeibo tencentWeibo = new TencentWeibo(weiboContent, app.getTencentClientId(), 
@@ -134,7 +134,7 @@ public class ContestWeiboPusher {
 		Thread sina = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				sinaWeibo.sendContestSinaWeibo(App.Draw, sinaAccessToken, WEIBO_TOP_COUNT);
+				sinaWeibo.sendContestSinaWeibo(app, sinaAccessToken, WEIBO_TOP_COUNT);
 			}
 		});
 		sina.start();
@@ -143,7 +143,7 @@ public class ContestWeiboPusher {
 		Thread tencent = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				tencentWeibo.sendContestTencentWeibo(tencentAccessToken, WEIBO_TOP_COUNT);
+				tencentWeibo.sendContestTencentWeibo(app, tencentAccessToken, WEIBO_TOP_COUNT);
 			}
 		});
 		tencent.start();

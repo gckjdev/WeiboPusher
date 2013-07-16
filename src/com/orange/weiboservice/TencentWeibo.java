@@ -91,7 +91,7 @@ public class TencentWeibo {
 	}
 	
 	
-	public void sendContestTencentWeibo(String accessToken, int topCount) {
+	public void sendContestTencentWeibo(App app, String accessToken, int topCount) {
 		
 		for (int i = topCount-1; i >= 0; i--) {
 			String drawingPath = weiboContent.getdrawing(i);
@@ -105,7 +105,7 @@ public class TencentWeibo {
 				QQId = "@"+QQId;
 			}
 			String text = "画画大赛#"+contestSubject+"#结束啦！  恭喜" + QQId + " 在参赛的"+participatorCount+"名玩家中脱颖而出， " 
-				      +"荣获第"+(i+1)+"名。 让我们期待下一次比赛吧，敬请关注@drawlively 。 ";
+				      +"荣获第"+(i+1)+"名。 让我们期待下一次比赛吧，敬请关注@" + app.getTencentNick() +" 。 ";
 
 			sendOneTencentWeibo(accessToken, drawingPath, text);
 			
