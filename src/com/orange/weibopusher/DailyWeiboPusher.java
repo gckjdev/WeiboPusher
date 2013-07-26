@@ -82,9 +82,12 @@ public class DailyWeiboPusher {
 			for (int i = AWARD_TOP_COUNT-1; i >= 0; i--) {
 				String userId = weiboContent.getUserId(i);
 				String opus = weiboContent.getWord(i);
-			
-				awardService.chargeAwardCoins(userId, i, AwardType.DAILY);
-				awardService.sendDailyAwardMessage(CUSTOMER_SERVICE_UID, userId, opus, i+1);
+
+                if (userId != null){
+				    awardService.chargeAwardCoins(userId, i, AwardType.DAILY);
+				    awardService.sendDailyAwardMessage(CUSTOMER_SERVICE_UID, userId, opus, i+1);
+                }
+
 				if ( i < WEIBO_TOP_COUNT ) {
 					// 前三名才在数据库中插入记录
 					awardService.insertRankToDB(userId, i+1);

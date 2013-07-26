@@ -73,9 +73,11 @@ public class ContestWeiboPusher {
 					String userId = weiboContent.getUserId(i);
 					String contestSubject = weiboContent.getContestSubject();
 					int participatorCount = weiboContent.getParticipatorCount();
-				
-					awardService.chargeAwardCoins(userId, i, AwardType.CONTEST);
-					awardService.sendContestAwardMessage(CUSTOMER_SERVICE_UID, userId, contestSubject, i+1, participatorCount);
+
+                    if (userId != null){
+					    awardService.chargeAwardCoins(userId, i, AwardType.CONTEST);
+					    awardService.sendContestAwardMessage(CUSTOMER_SERVICE_UID, userId, contestSubject, i+1, participatorCount);
+                    }
 				}
 				return;
 		} 
