@@ -13,12 +13,12 @@
 			<name>local nexus</name>
 			<url>http://192.168.1.101:8091/nexus/content/groups/public</url>
 		</repository>
+-->
 		<repository>
 			<id>repo1 central</id>
 			<name>Maven Central Repo1</name>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
--->
 	</repositories>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -85,11 +85,13 @@
 		    <artifactId>ezmorph</artifactId>
 	            <version>1.0.4</version>
 	    </dependency>
+<!--
 	    <dependency>
 		    <groupId>net.sf.json-lib</groupId>
 		    <artifactId>json-lib</artifactId>
 		    <version>2.4</version>
 	    </dependency>
+-->
 		<dependency>
 			<groupId>QQ-weibo4j</groupId>
 			<artifactId>QQ-weibo4j</artifactId>
