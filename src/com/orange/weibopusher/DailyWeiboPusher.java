@@ -50,21 +50,28 @@ public class DailyWeiboPusher {
 		
 		
 		// 发新浪微博
-		if ( (option & OPTION_SINA) == OPTION_SINA) {
-			final String drawAccessToken = args[0];
-			final String xiaojiAccessToken = args[2];
-			Thread sina = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					sinaWeibo.sendDailySinaWeibo(App.Draw, drawAccessToken, WEIBO_TOP_COUNT);
-					sinaWeibo.sendDailySinaWeibo(App.Xiaoji, xiaojiAccessToken, WEIBO_TOP_COUNT);
-				}
-			});
-			sina.start();
-		}
+        try{
+            if ( (option & OPTION_SINA) == OPTION_SINA) {
+                final String drawAccessToken = args[0];
+                final String xiaojiAccessToken = args[2];
+                Thread sina = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sinaWeibo.sendDailySinaWeibo(App.Draw, drawAccessToken, WEIBO_TOP_COUNT);
+                        sinaWeibo.sendDailySinaWeibo(App.Xiaoji, xiaojiAccessToken, WEIBO_TOP_COUNT);
+                    }
+                });
+                sina.start();
+            }
+        }
+        catch (Exception e){
+
+        }
+
 		
 		// 发腾讯微博
-		if ( (option & OPTION_TENCENT) == OPTION_TENCENT) {
+        try{
+            if ( (option & OPTION_TENCENT) == OPTION_TENCENT) {
 			final String drawQQAccessToken = args[1];
 			final String xiaojiQQAccessToken = args[3];
 			Thread tencent = new Thread(new Runnable() {
@@ -74,7 +81,11 @@ public class DailyWeiboPusher {
 				}
 			});
 			tencent.start();
-		}
+            }
+        }
+        catch (Exception e1){
+
+        }
 		
 		// 附加业务，奖励金币，并发私信告知
 		if ( (option & OPTION_AWARD) == OPTION_AWARD) {

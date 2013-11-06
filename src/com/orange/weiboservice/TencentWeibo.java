@@ -1,6 +1,7 @@
 package com.orange.weiboservice;
 
 
+import com.orange.common.utils.StringUtil;
 import com.orange.weiboservice.WeiboApp.App;
 import com.tencent.weibo.api.TAPI;
 import com.tencent.weibo.oauthv2.OAuthV2;
@@ -42,13 +43,16 @@ public class TencentWeibo {
 			String QQId = weiboContent.getQQId(i);
 			String word = weiboContent.getWord(i);
 			
-			if (QQId == null) {
-				QQId = "玩家" + weiboContent.getNickName(i);
+			if (StringUtil.isEmpty(QQId)) {
+//				QQId = "玩家" + weiboContent.getNickName(i);
+                QQId = weiboContent.getNickName(i);
 			} else {
 				QQId = "@"+QQId;
 			}
-			String text = "今日#猜猜画画作品榜#第" + (i + 1) + "名：" + QQId + " 的【" + word
-			+ "】。欣赏每日精彩涂鸦, 获取猜猜画画最新动态，敬请关注@drawlively 。";
+//			String text = "今日#小吉画画作品榜#第" + (i + 1) + "名：" + QQId + " 的【" + word
+//			+ "】。欣赏每日精彩涂鸦, 获取小吉画画最新动态，敬请关注@drawlively 。";
+
+            String text = "NO." + (i + 1) + " TODAY, BY " + QQId;
 
 			sendOneTencentWeibo(accessToken, drawingPath, text);
 //			sendOneTencentWeibo(accessToken,  "/home/larmbr/Downloads/drawlively.jpg", "一条测试微博 "+i);
@@ -69,14 +73,18 @@ public class TencentWeibo {
 			String drawingPath = weiboContent.getdrawing(i);
 			String QQId = weiboContent.getQQId(i);
 			String word = weiboContent.getWord(i);
-			
-			if (QQId == null) {
-				QQId = "玩家" + weiboContent.getNickName(i);
-			} else {
-				QQId = "@"+QQId;
-			}
-			String text = "今日#" + app.getAppName() + "作品榜#第" + (i + 1) + "名：" + QQId + " 的【" + word
-			+ "】。欣赏每日精彩涂鸦, 获取" + app.getAppName() + "最新动态，敬请关注@" + app.getTencentNick() +" 。";
+
+            if (StringUtil.isEmpty(QQId)) {
+//				QQId = "玩家" + weiboContent.getNickName(i);
+                QQId = weiboContent.getNickName(i);
+            } else {
+                QQId = "@"+QQId;
+            }
+//			String text = "今日#" + app.getAppName() + "作品榜#第" + (i + 1) + "名：" + QQId + " 的【" + word
+//			+ "】。欣赏每日精彩涂鸦, 获取" + app.getAppName() + "最新动态，敬请关注@" + app.getTencentNick() +" 。";
+
+            String text = "NO." + (i + 1) + " TODAY, BY " + QQId;
+
 
 			sendOneTencentWeibo(accessToken, drawingPath, text);
 //			sendOneTencentWeibo(accessToken,  "/home/larmbr/Downloads/drawlively.jpg", "一条测试微博 "+i);

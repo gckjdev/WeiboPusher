@@ -29,12 +29,15 @@ public class SinaWeibo {
 			String word = weiboContent.getWord(i);
 			
 			if (sinaId == null) {
-				sinaId = "玩家" + weiboContent.getNickName(i);
+//				sinaId = "玩家" + weiboContent.getNickName(i);
+                sinaId = weiboContent.getNickName(i);
 			} else {
 				sinaId = "@"+sinaId;
 			}
-			String text = "今日#" + app.getAppName() + "作品榜#第" + (i + 1) + "名：" + sinaId + " 的【" + word
-			+ "】。欣赏每日精彩涂鸦, 获取"+ app.getAppName()+"最新动态，敬请关注@" + app.getSinaNick() +"。";
+//			String text = "今日#" + app.getAppName() + "作品榜#第" + (i + 1) + "名：" + sinaId + " 的【" + word
+//			+ "】。欣赏每日精彩涂鸦, 获取"+ app.getAppName()+"最新动态，敬请关注@" + app.getSinaNick() +"。";
+
+            String text = "NO." + (i + 1) + " TODAY, BY " + sinaId;
 
 			sendOneSinaWeibo(accessToken, drawingPath, text);
 			

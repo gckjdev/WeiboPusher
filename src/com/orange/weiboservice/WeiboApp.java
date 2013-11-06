@@ -5,9 +5,9 @@ public class WeiboApp {
 	public String tencentOpenID;
 
 	public enum App {
-		Draw("猜猜画画", "猜猜画画手机版", "drawlively", "801123669", 
+		Draw("小吉画画", "小吉画画", "drawlively", "801123669",
 				"30169d80923b984109ee24ade9914a5c", "3002527FED5211195D60F934E5AF75AD"),
-		Xiaoji("小吉画画", "小吉画画", "xiaojihuahua", "801357429", 
+		Xiaoji("小吉画画", "小吉画画移动版", "xiaojihuahua", "801357429",
 				"143204e7e6b048a046ac418436a7a4e5", "EA7C4C17F409F40A6821E27BED3D52E3");
 		
 		private final String appName;
